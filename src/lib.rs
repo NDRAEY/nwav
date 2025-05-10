@@ -55,7 +55,7 @@ impl<'data_lt> WAV<'_> {
         WAV { data }
     }
 
-    pub fn read_chunk_hdr(&self, position: usize) -> ChunkHeader {
+    fn read_chunk_hdr(&self, position: usize) -> ChunkHeader {
         let orig_data = &self.data[position..position + size_of::<ChunkHeader>()];
 
         unsafe { (orig_data.as_ptr() as *const ChunkHeader).read_unaligned() }
@@ -145,4 +145,11 @@ impl<'data_lt> WAV<'_> {
 			_ => None
 		}
 	}
+
+    pub fn read_chunk_by_name(&'data_lt self, chunk_name: &str) -> Option<Chunk<'data_lt>> {
+        let chunks = self.available_chunks();
+        let chunk = chunks.iter().filter(|&a| a.name == chunk_name).next()?;
+
+        self.read_chunk(chunk)
+    }
 }
