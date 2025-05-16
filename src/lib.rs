@@ -51,7 +51,7 @@ pub struct WAV<'a> {
 }
 
 impl<'data_lt> WAV<'_> {
-    pub fn from_data(data: &'data_lt [u8]) -> WAV<'data_lt> {
+    pub const fn from_data(data: &'data_lt [u8]) -> WAV<'data_lt> {
         WAV { data }
     }
 
