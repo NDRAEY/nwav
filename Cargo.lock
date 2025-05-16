@@ -10,7 +10,7 @@ checksum = "76a2e8124351fda1ef8aaaa3bbd7ebbcb486bbcd4225aca0aa0d84bb2db8fecb"
 
 [[package]]
 name = "nwav"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "arrayref",
 ]

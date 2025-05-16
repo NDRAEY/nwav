@@ -1,7 +1,13 @@
 [package]
 name = "nwav"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
+authors = ["NDRAEY <pikachu_andrey@vk.com>"]
+license = "MIT"
+description = "no_std compatible WAV metadata parser"
+repository = "https://github.com/NDRAEY/nwav"
+categories = ["no-std"]
+keywords = ["wav", "audio", "no_std"]
 
 [dependencies]
 arrayref = "0.3.9"
