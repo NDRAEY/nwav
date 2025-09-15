@@ -2,10 +2,9 @@
 
 extern crate alloc;
 
-use alloc::string::{String, ToString};
+use alloc::string::String;
 use alloc::vec;
 use alloc::vec::Vec;
-use arrayref::array_ref;
 
 #[derive(Debug)]
 #[repr(C, packed)]
@@ -35,7 +34,7 @@ pub struct Fmt {
 pub enum Chunk<'a> {
     Riff(Riff),
     Format(Fmt),
-    List(Vec<(String, String)>),
+    List(Vec<(&'a str, &'a str)>),
     Data(&'a [u8]),
 }
 
@@ -92,7 +91,7 @@ impl<'data_lt> WAV<'_> {
         chunks
     }
 
-	fn parse_list(&self, data: &[u8]) -> Option<Chunk<'data_lt>> {
+	fn parse_list(&self, data: &'data_lt [u8]) -> Option<Chunk<'data_lt>> {
         let mut entities_list = Vec::new();
 		
 		if data[..4] != *b"INFO" {
@@ -103,15 +102,15 @@ impl<'data_lt> WAV<'_> {
 
 		while index < data.len() {
 			// ...
-            let name = String::from_utf8_lossy(&data[index..index + 4]).to_string();
+            let name = str::from_utf8(&data[index..index + 4]).unwrap();
 
             index += 4;
 
-            let name_len = u32::from_le_bytes(*array_ref![data[index..index + 4], 0, 4]) as usize;
+            let name_len = u32::from_le_bytes(data[index..index + 4].try_into().unwrap()) as usize;
 
             index += 4;
 
-            let value = String::from_utf8_lossy(&data[index..index + name_len - 1]).to_string();
+            let value = str::from_utf8(&data[index..index + name_len - 1]).unwrap();
 
             entities_list.push((name, value));
 
